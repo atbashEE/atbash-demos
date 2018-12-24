@@ -1,0 +1,157 @@
+= Resource API Demo
+Rudy De Busscher <rdebusscher@gmail.com>
+v1.0, ??/??/2019
+ifndef::imagesdir[:imagesdir: images]
+
+image::ccsharealike.png[]
+
+== What
+
+The **Resource API** is available within the Atbash utils-se artifact and is an extensible API for reading resources.
+
+By default, it supports reading the content of resource files from the classpath, URL and file location. But it has an SPI so that these locations can be extended to include for example reading from the Servlet Context (defined with Atbash Octopus) or your own custom scheme.
+
+It is very convenient in combination with the Configuration defined by MicroProfile Config to read a bunch of configuration values from a file. As it is using the MicroProfile Config features, it is easy to change these configuration values for each environment.
+
+== Demo
+
+In this demo, we have 2 property keys for which we want to define the value for several environments. So we define these property values in a properties file and specify a different properties file for each environment.
+
+== Requirements
+
+1. The demo has the following maven dependencies.
+
+* The Atbash utils artifact which contains the Resource API
+
+    <dependency>
+        <groupId>be.atbash.utils</groupId>
+        <artifactId>utils-se</artifactId>
+        <version>0.9.3-SNAPSHOT</version>
+    </dependency>
+
+* An implementation of MicroProfile config, here I'm using the Apache Geronimo one.
+
+    <dependency>
+        <groupId>org.apache.geronimo.config</groupId>
+        <artifactId>geronimo-config-impl</artifactId>
+        <version>1.2.1</version>
+    </dependency>
+
+* An SLF4J logging binding since Atbash utils is using the SLF4J API for logging.
+
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.25</version>
+    </dependency>
+
+2. Any JDK 8 or 11 (classpath) version to run this demo.
+
+== The basic
+
+Let us have a look at the main program code of our demo.
+
+    public static void main(String[] args) throws IOException {
+        String configFile = ConfigProvider.getConfig().getValue("config.file", String.class);
+        ResourceUtil resourceUtil = ResourceUtil.getInstance();
+        if (resourceUtil.resourceExists(configFile)) {
+            Properties props = new Properties();
+            InputStream inputStream = resourceUtil.getStream(configFile);
+            props.load(inputStream);
+            inputStream.close();
+            System.out.println(props);
+        } else {
+            System.out.println(String.format("Config Location [%s] not found", configFile));
+        }
+    }
+
+The code starts by asking for the configuration value of the key **config.file**. +
+The first check we make is to see if the resource exists. If not, a message is written that the config location is not found. +
+In the case the location exists, we retrieve the _InputStream_ for the resource (using the Resource API) and use this to load a _Properties_ instance.
+
+== The default case
+
+In the default case, we point our **config.file** to a classpath resource since this will always be available. This is achieved by creating the file **\resources\META-INF\microprofile-config.properties** (a default location for MicroProfile Config sources) and define his contents as
+
+****
+config.file=classpath:default.properties
+****
+
+As specified, we need then, of course, this **default.properties** file in the classpath (at the root) and in this demo it has the following content:
+
+----
+prop1=value1
+prop2=value2
+----
+
+When we run the _Tester_ application, we see the following output
+
+****
+{prop2=value2, prop1=value1}
+****
+
+which means the MicroProfile Config has picked up that the properties file should be read from the classpath _default.properties_ file and the Resource API has done this for us very nicely.
+
+== The test environment
+
+However, this is not limited to the test environment scenario. We just have the need to overrule the default values we have defined in the previous section.  This can be done by specifying an alternative location of that properties file using environment variables or system properties (as this ar default locations for MicroProfile Config with higher priority then the properties file).
+
+So, when we have somewhere on the file system a file called **test-version.properties** with the following content
+
+----
+prop1=test-value1
+prop2=test-value2
+----
+
+We can use these values by running our application with the system property like this
+
+****
+-Dconfig.file=<path-to>/test-version.properties
+****
+
+And the program will now have the output
+
+****
+{prop2=value2, prop1=value1}
+****
+
+In this example, we define the location without any prefix (in the previous one we used _classpath:_) and thus it assumes it is a file location. (we can also explicitly specify the _file:_ prefix)
+
+== Extensible
+
+I have called it the _Resource API_ which means it should be extensible in some way. And it is, implement the following interface for your own special resource handling requirement
+
+----
+    public interface ResourceReader {
+
+        /**
+         * Determines if the implementation can read the resource based on the prefix.
+         */
+        boolean canRead(String resourcePath, Object context);
+
+        /**
+         * Determines if the resource exists and can be read.
+         */
+        boolean exists(String resourcePath, Object context);
+
+        /**
+         * Loads the resource.
+         */
+        InputStream load(String resourcePath, Object context) throws IOException;
+    }
+----
+
+The implementation must have the **be.atbash.util.ordered.Order** annotation with a positive value. It determines the order in which the different **ResourceReader**s are consulted to try to handle the resource path. +
+The implementation is picked up by the Service Loader mechanism and therefore the implementation class name (fully qualified class name) should be placed in the file
+
+****
+\resources\META-INF\services\be.atbash.util.resource.ResourceReader
+****
+
+In this demo, I have created an implementation of _ResourceReader_ which uses a _Map_ to store the 'configuration file content' and which uses the prefix _myData:_.
+
+Have a look at the **MapBasedResourceReader** class and try out the demo application with
+
+****
+-Dconfig.file=myData:v1
+****
