@@ -1,0 +1,92 @@
+= Alias Configuration Demo
+Rudy De Busscher <rdebusscher@gmail.com>
+v1.0, ??/??/2019
+ifndef::imagesdir[:imagesdir: images]
+
+image::ccsharealike.png[]
+
+== What
+
+The _alias configuration MicroProfile ConfigSource_ allows library writers to change their configuration keys in a backward compatible manner.
+
+As a library writer, you have published your first version to the public and for some service, the users of your library need to use the configuration parameter **config.key.old**. +
+But when updating the library to the next version, you realize that the naming of that configuration parameter is not as good as you thought. Or there is some good reason why you think you should rename the configuration key. You change the code to use **config.key.new** and document it in the release notes.
+
+But of course, a lot of users of your first version of the library didn't read these release notes. And although your library is backward compatible, at runtime it fails due to the fact that the developer forgot (or didn't know) to change the configuration key.
+
+With the Atbash Config Alias ConfigSource for MicroProfile Configuration, you can support both versions and give them a smoother upgrade process.
+
+== Demo
+
+The demo contains a library which uses now the new Configuration key **config.key.new** but the demo application has still defined a value for the old key **config.key.old**. But the app still works with the help of the Alias Configuration feature.
+
+== Requirements
+
+1. The demo has the following maven dependencies.
+
+* The Atbash utils artifact which contains the Resource API
+
+    <dependency>
+        <groupId>be.atbash.config</groupId>
+        <artifactId>atbash-config</artifactId>
+        <version>0.9.3-SNAPSHOT</version>
+    </dependency>
+
+* An implementation of MicroProfile config, here I'm using the Red Hat SmallRye one.
+
+    <dependency>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-config</artifactId>
+        <version>1.3.5</version>
+    </dependency>
+
+* An SLF4J logging binding since Atbash utils is using the SLF4J API for logging.
+
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.25</version>
+    </dependency>
+
+2. Any JDK 8 or 11 (classpath) version to run this demo.
+
+== How does it work
+
+The Maven project has 2 modules, the _Library_, and the _Program_.
+
+The _Library_ contains a class which reads a value from the configuration.
+
+----
+ConfigProvider.getConfig().getValue("config.key.new", String.class)
+----
+
+And our application, within _Program_, uses this class from the Library, but still refers to the old key for the configuration. +
+In the file **src\main\resources\microprofile-config.properties** you can see the following content
+
+----
+config.key.old=Demo
+----
+
+Although the names of the keys don't match, the application still shows the configuration value.
+
+This is due to the fact that within the Library module, the file **\src\main\resources\config\alias.library.properties** is defined.
+
+----
+config.key.new=config.key.old
+----
+
+This defines that after a search for a value of _config.key.new_, the key _config.key.old_ should be looked up. This would be then the key value of the old version of the library.
+
+Atbash Config has defined a ConfigSource like there are other defined for System parameters, environment variables, and config file, which uses the information found in the files **config/alias.<something>.properties**. +
+All the files on the classpath which correspond to this name pattern, are found by the **ResourceScanner** implemented within Atbash utils SE library.
+
+This ConfigSource is always placed last in the chain of sources used by MicroProfile Config and thus when the code in this class is executed, no value is found yet for the configuration key. When the key is defined within those alias properties files, the search through all Sources ifs performed again with the _old_ key.
+
+As a developer, you get informed when a value for the old key value is found and that you should change it to the new value.
+
+----
+[main] INFO be.atbash.util.resource.internal.ResourceWalker - Reflections took 16 ms to scan 16 urls, producing 16 keys and 16 values
+[main] INFO be.atbash.config.source.AliasConfigSource - Found a configuration value for deprecated key 'config.key.old'. Please use the new key 'config.key.new'
+----
+
+You can also see in the log file that the search for these mapping files are very fast (16 ms) but this of course depends on the size of the deployed application.
