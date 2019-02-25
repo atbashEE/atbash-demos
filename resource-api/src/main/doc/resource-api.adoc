@@ -26,7 +26,7 @@ In this demo, we have 2 property keys for which we want to define the value for 
     <dependency>
         <groupId>be.atbash.utils</groupId>
         <artifactId>utils-se</artifactId>
-        <version>0.9.3-SNAPSHOT</version>
+        <version>0.9.3</version>
     </dependency>
 
 * An implementation of MicroProfile config, here I'm using the Apache Geronimo one.

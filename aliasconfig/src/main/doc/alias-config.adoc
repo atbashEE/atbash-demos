@@ -29,7 +29,7 @@ The demo contains a library which uses now the new Configuration key **config.ke
     <dependency>
         <groupId>be.atbash.config</groupId>
         <artifactId>atbash-config</artifactId>
-        <version>0.9.3-SNAPSHOT</version>
+        <version>0.9.3</version>
     </dependency>
 
 * An implementation of MicroProfile config, here I'm using the Red Hat SmallRye one.
