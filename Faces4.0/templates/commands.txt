@@ -18,11 +18,8 @@ mvn clean package
 
 deploy to a certified Jakarta EE 10 web or full profile (like Payara https://www.payara.fish/downloads/payara-platform-community-edition/ )
 
-# The Faces 4.0 hello World
-http://localhost:8080/hello/index.xhtml
+# Using composition (templates)
+http://localhost:8080/template/index.xhtml
 
-# PrimeFaces example
-http://localhost:8080/hello/testPF.xhtml
 
-# Using th new f:selectItemGroups
-http://localhost:8080/hello/item.xhtml
+Example also uses PrimeFaces Themes as defined in `web.xml`.

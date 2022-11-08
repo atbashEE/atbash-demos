@@ -1,4 +1,5 @@
-====
+<!--
+
     Copyright 2022 Rudy De Busscher
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +13,12 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-====
 
-mvn clean package
-
-deploy to a certified Jakarta EE 10 web or full profile (like Payara https://www.payara.fish/downloads/payara-platform-community-edition/ )
-
-# The Faces 4.0 hello World
-http://localhost:8080/hello/index.xhtml
-
-# PrimeFaces example
-http://localhost:8080/hello/testPF.xhtml
-
-# Using th new f:selectItemGroups
-http://localhost:8080/hello/item.xhtml
+-->
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+         https://jakarta.ee/xml/ns/jakartaee
+         https://jakarta.ee/xml/ns/jakartaee/beans_4_0.xsd"
+       bean-discovery-mode="annotated">
+    <!-- bean-discovery-mode="annotated" is the default but is here to make the new default clear for everyone -->
+</beans>

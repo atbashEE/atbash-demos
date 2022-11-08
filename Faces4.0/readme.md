@@ -7,3 +7,7 @@ The demos are not using the new Taglib URI (like `xmlns:h="jakarta.faces.html"`)
 ## hello
 
 Getting started for standard Faces, Primefaces and using the new selectItemGroups.
+
+## templates
+
+Using faces composites (for templating) and define a PrimeFaces theme (through web.xml)
