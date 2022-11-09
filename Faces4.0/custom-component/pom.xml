@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>be.rubus.atbash.jsf.demo</groupId>
-    <artifactId>composites</artifactId>
+    <artifactId>custom-component</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
@@ -65,16 +65,10 @@
             <classifier>jakarta</classifier>
         </dependency>
 
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>primeflex</artifactId>
-            <version>3.2.1</version>
-            <scope>runtime</scope>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>composites</finalName>
+        <finalName>jsf-custom</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -122,6 +116,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

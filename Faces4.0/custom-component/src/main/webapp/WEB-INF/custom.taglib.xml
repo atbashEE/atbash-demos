@@ -19,30 +19,22 @@
                 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facelettaglibrary_4_0.xsd"
                 version="4.0">
 
-    <namespace>http://www.atbash.be/components</namespace>
+    <namespace>http://www.atbash.be/custom/component</namespace>
 
     <tag>
-        <tag-name>formField</tag-name>
-
+        <tag-name>cameraCapture</tag-name>
         <component>
-            <resource-id>custom/formField.xhtml</resource-id>
+            <component-type>atbash.CameraCapture</component-type>
         </component>
         <attribute>
             <name>value</name>
             <required>true</required>
         </attribute>
         <attribute>
-            <name>label</name>
+            <name>actionListener</name>
             <required>true</required>
         </attribute>
-        <attribute>
-            <name>required</name>
-            <required>false</required>
-        </attribute>
-        <attribute>
-            <name>disabled</name>
-            <required>false</required>
-        </attribute>
+
     </tag>
 
 </facelet-taglib>
