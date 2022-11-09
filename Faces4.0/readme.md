@@ -15,3 +15,11 @@ Using faces composites (for templating) and define a PrimeFaces theme (through w
 ## composites
 
 Using Composite components including assigning them to a custom namespace
+
+## custom-component
+
+Example of a custom component, take a picture with the web camera.
+
+## navigation
+
+Page navigation through action attribute, Post-Redirect-Get pattern and the new extension-less mapping.
