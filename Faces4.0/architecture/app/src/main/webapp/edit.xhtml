@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2022 Rudy De Busscher
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>TODO App</title>
+    <h:outputStylesheet library="webjars" name="primeflex/3.2.0/primeflex.min.css"/>
+</h:head>
+<h:body>
+    <p:growl/>
+    <h1>#{todoEditBean.actionMessage} TODO</h1>
+
+    <h:form id="frm">
+        <h:inputHidden id="todoId" value="#{todoEditBean.editTodo.id}"/>
+
+        <div class="card">
+            <div class="field grid">
+                <p:outputLabel for="title" class="col-12 mb-2 md:col-2 md:mb-0">Title</p:outputLabel>
+                <div class="col-12 md:col-10">
+                    <p:inputText id="title" value="#{todoEditBean.editTodo.title}"
+                                 required="true" label="Title"/>
+                </div>
+            </div>
+            <div class="field grid">
+                <p:outputLabel  for="description" class="col-12 mb-2 md:col-2 md:mb-0">Description</p:outputLabel>
+                <div class="col-12 md:col-10">
+                    <p:inputText id="description" value="#{todoEditBean.editTodo.description}"
+                                 required="true" label="Description"/>
+                </div>
+            </div>
+        </div>
+
+        <p:commandButton value="Save" icon="pi pi-save" action="index.xhtml" id="saveBtn"
+                         actionListener="#{todoEditBean.save()}" ajax="false"/>
+
+        <p:commandButton value="Cancel" icon="pi pi-times" action="index.xhtml" immediate="true"
+                         styleClass="ui-button-danger" ajax="false" id="idCancel"/>
+    </h:form>
+</h:body>
+</html>

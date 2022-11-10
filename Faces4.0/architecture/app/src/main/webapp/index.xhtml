@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2022 Rudy De Busscher
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>TODO App</title>
+</h:head>
+<h:body>
+    <h1>TODO App</h1>
+
+    <h:form id="frm">
+
+        <p:dataTable id="todosTbl" value="#{todoBean.allTodos()}" var="_todo">
+            <p:column headerText="Title"><h:outputText value="#{_todo.title}"/></p:column>
+            <p:column headerText="Description"><h:outputText value="#{_todo.description}"/></p:column>
+            <p:column headerText="Done">
+                <p:commandButton actionListener="#{todoEditBean.done(_todo.id)}"
+                                 icon="pi pi-check" id="doneBtn"
+                                 rendered="#{not _todo.done}" update="frm"/>
+                <h:panelGroup rendered="#{_todo.done}">
+                    <i class="pi pi-check"></i>
+                </h:panelGroup>
+            </p:column>
+            <p:column style="width:3rem;text-align: center">
+                <p:commandButton ajax="false" action="edit.xhtml" actionListener="#{todoEditBean.edit(_todo.id)}"
+                                 icon="pi pi-file-edit" styleClass="rounded-button" id="editBtn"/>
+            </p:column>
+            <f:facet name="footer">
+                <p:commandButton value="New" icon="pi pi-plus" id="newBtn"
+                                 ajax="false" action="edit.xhtml"
+                                 styleClass="ui-button-success" style="margin-right: .5rem"/>
+
+            </f:facet>
+        </p:dataTable>
+
+    </h:form>
+</h:body>
+</html>
