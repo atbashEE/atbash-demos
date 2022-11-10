@@ -27,3 +27,7 @@ Page navigation through action attribute, Post-Redirect-Get pattern and the new 
 ## architecture
 
 TODO Application with Faces and REST 'views'  Mainly demonstrates the Exception handling solution from the 'viewless' backend/service layer and translate it to Faces and JAX-RS.
+
+## chat
+
+websocket example using a chat app.
