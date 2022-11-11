@@ -2,7 +2,9 @@
 
 Faces 4.0, as part of Jakarta EE 10.
 
-The demos are not using the new Taglib URI (like `xmlns:h="jakarta.faces.html"`) as they are not yet supported in IntelliJ, see https://youtrack.jetbrains.com/issue/IDEA-305619/
+The demos are not using the new Taglib URI (like `xmlns:h="jakarta.faces.html"`) as they are only supported in the upcoming 2022.3 release.
+
+See also the `jsf-alive.pdf`.
 
 ## hello
 
