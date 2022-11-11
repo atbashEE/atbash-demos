@@ -35,3 +35,7 @@ websocket example using a chat app.
 ## programmatic
 
 Example of a programmatic creation of a Faces view.
+
+## testcontainers
+
+Example of a testing a Faces application using Testcontainers Selenium framework.
