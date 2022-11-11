@@ -31,3 +31,7 @@ TODO Application with Faces and REST 'views'  Mainly demonstrates the Exception 
 ## chat
 
 websocket example using a chat app.
+
+## programmatic
+
+Example of a programmatic creation of a Faces view.
